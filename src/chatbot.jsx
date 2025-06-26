@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './chatbot.css'; // Assuming you have a CSS file for styles
+import './App.css'; // Import global styles if needed
 
 const faqQA = [
   {
@@ -79,182 +81,6 @@ If the issue persists, contact support.`,
   },
 ];
 
-const styles = {
-  bubble: {
-    position: 'fixed',
-    bottom: 20,
-    right: 20,
-    width: 64,
-    height: 64,
-    borderRadius: '50%',
-    background: 'linear-gradient(135deg, #00b09b 0%, #96c93d 100%)',
-    color: 'white',
-    border: 'none',
-    fontSize: 28,
-    cursor: 'pointer',
-    boxShadow: '0 8px 20px rgba(0,176,155,0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'transform 0.3s ease',
-    userSelect: 'none',
-  },
-  chatWindow: {
-    position: 'fixed',
-    bottom: 20,
-    right: 20,
-    width: 440, // widened as per your request
-    height: 540,
-    borderRadius: 24,
-    boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-    background: 'linear-gradient(135deg, #f7fdf9, #eafaf1)',
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden',
-    fontFamily: "'Inter', sans-serif",
-    userSelect: 'none',
-  },
-  header: {
-    padding: '16px 24px',
-    background: 'linear-gradient(90deg, #00b09b 0%, #96c93d 100%)',
-    color: '#fff',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontWeight: '700',
-    fontSize: 20,
-    letterSpacing: '0.07em',
-    textTransform: 'uppercase',
-    userSelect: 'none',
-  },
-  closeButton: {
-    background: 'transparent',
-    border: 'none',
-    color: '#fff',
-    fontSize: 26,
-    cursor: 'pointer',
-    transition: 'color 0.2s ease',
-    userSelect: 'none',
-  },
-  navContainer: {
-    display: 'flex',
-    borderTop: '1px solid #ddd',
-    backgroundColor: '#f9f9f9',
-    padding: '10px 0',
-    justifyContent: 'space-around',
-  },
-  navButton: (active) => ({
-    flex: 1,
-    margin: '0 10px',
-    padding: 14,
-    border: 'none',
-    backgroundColor: active ? '#96c93d' : 'transparent',
-    color: active ? '#fff' : '#555',
-    cursor: 'pointer',
-    fontWeight: active ? '700' : '600',
-    fontSize: 16,
-    borderRadius: 12,
-    userSelect: 'none',
-    transition: 'all 0.3s ease',
-  }),
-  scrollArea: {
-    flex: 1,
-    overflowY: 'auto',
-    padding: '20px 28px',
-    scrollbarWidth: 'thin',
-    scrollbarColor: '#96c93d transparent',
-    backgroundColor: 'transparent'
-  },
-  chatBubble: (isUser) => ({
-    display: 'inline-block',
-    padding: '14px 20px',
-    borderRadius: 28,
-    background: isUser
-        ? 'linear-gradient(135deg, rgba(162, 233, 199, 0.9), rgba(0, 176, 155, 0.9))'
-        : 'rgba(255, 255, 255, 0.9)',
-    color: isUser ? '#004d40' : '#333',
-    maxWidth: '75%',
-    boxShadow: '0 3px 8px rgba(0,0,0,0.1)',
-    marginBottom: 14,
-    userSelect: 'text',
-  }),
-  inputContainer: {
-    padding: 16,
-    borderTop: '1px solid #ddd',
-    display: 'flex',
-    alignItems: 'center',
-    backgroundColor: '#f0f7f3',
-  },
-  input: {
-    flex: 1,
-    padding: '14px 18px',
-    borderRadius: 24,
-    border: '1.5px solid #96c93d',
-    fontSize: 16,
-    outline: 'none',
-    transition: 'box-shadow 0.3s ease',
-  },
-  sendButton: {
-    marginLeft: 12,
-    background: 'linear-gradient(135deg, #00b09b 0%, #96c93d 100%)',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 24,
-    padding: '14px 24px',
-    fontWeight: '700',
-    fontSize: 16,
-    cursor: 'pointer',
-    boxShadow: '0 10px 25px rgba(150,201,61,0.5)',
-    userSelect: 'none',
-  },
-  quickRepliesContainer: {
-    display: 'flex',
-    gap: '12px',
-    flexWrap: 'wrap',
-    padding: '8px 20px',
-    backgroundColor: '#e2f5e9',
-    borderRadius: 20,
-    marginTop: 10,
-  },
-  quickReplyButton: {
-    background: '#96c93d',
-    color: 'white',
-    border: 'none',
-    borderRadius: 18,
-    padding: '8px 14px',
-    cursor: 'pointer',
-    fontWeight: '600',
-    fontSize: 14,
-    userSelect: 'none',
-    flexShrink: 0,
-    transition: 'background-color 0.2s ease',
-  },
-  supportForm: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 14,
-    padding: '0 28px 28px 28px',
-  },
-  inputField: {
-    padding: 12,
-    borderRadius: 8,
-    border: '1.5px solid #ccc',
-    fontSize: 15,
-    outline: 'none',
-  },
-  textareaField: {
-    minHeight: 100,
-  },
-  statusText: {
-    color: '#2e7d32',
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  homeContent: {
-    color: '#2e3a59',
-  },
-};
-
 function getRandomFaqs(count) {
   const copy = [...faqQA];
   const selected = [];
@@ -274,6 +100,7 @@ function findMatchingFaq(input) {
 }
 
 const SupportForm = () => {
+  // Your existing SupportForm code but replace inline styles with CSS classes
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState(null);
 
@@ -281,13 +108,13 @@ const SupportForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Implement your email sending API integration here
+    // Simulate sending
     setStatus('Support request sent! We will get back to you soon.');
     setForm({ name: '', email: '', message: '' });
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.supportForm}>
+    <form onSubmit={handleSubmit} className="support-form">
       <input
         type="text"
         name="name"
@@ -295,8 +122,8 @@ const SupportForm = () => {
         onChange={handleChange}
         placeholder="Your Name"
         required
-        style={styles.inputField}
         aria-label="Your Name"
+        className="input-field"
       />
       <input
         type="email"
@@ -305,8 +132,8 @@ const SupportForm = () => {
         onChange={handleChange}
         placeholder="Your Email"
         required
-        style={styles.inputField}
         aria-label="Your Email"
+        className="input-field"
       />
       <textarea
         name="message"
@@ -314,13 +141,13 @@ const SupportForm = () => {
         onChange={handleChange}
         placeholder="Describe your issue"
         required
-        style={{ ...styles.inputField, ...styles.textareaField }}
         aria-label="Describe your issue"
+        className="input-field textarea-field"
       />
-      <button type="submit" style={styles.sendButton}>
+      <button type="submit" className="send-button">
         Send Request
       </button>
-      {status && <p style={styles.statusText}>{status}</p>}
+      {status && <p className="status-text">{status}</p>}
     </form>
   );
 };
@@ -343,6 +170,7 @@ const Chatbot = () => {
   const addMessage = (sender, text) => {
     setChatHistory((prev) => [...prev, { sender, text }]);
   };
+
 
   // Map of related questions by question text
 const relatedQuestionsMap = {
@@ -377,36 +205,32 @@ const getRelatedQuickReplies = (currentQuestion) => {
 };
 
 const handleUserQuestion = (question) => {
-  addMessage('user', question);
+    addMessage('user', question);
 
-  const faq = faqQA.find((f) => f.question === question) || findMatchingFaq(question);
+    const faq = faqQA.find((f) => f.question === question) || findMatchingFaq(question);
 
-  if (faq) {
-    addMessage('bot', faq.answer);
-    // Update quick replies to related questions for smooth flow
-    setQuickReplies(getRelatedQuickReplies(faq.question));
-  } else {
-    addMessage('bot', "Sorry, I didn't quite get that. Could you please rephrase?");
-    // Show random quick replies if no match
-    setQuickReplies(getRandomFaqs(3));
-  }
-};
+    if (faq) {
+      addMessage('bot', faq.answer);
+      setQuickReplies(getRelatedQuickReplies(faq.question));
+    } else {
+      addMessage('bot', "Sorry, I didn't quite get that. Could you please rephrase?");
+      setQuickReplies(getRandomFaqs(3));
+    }
+  };
 
   const handleSend = () => {
     if (!chatInput.trim()) return;
-
     handleUserQuestion(chatInput);
     setChatInput('');
   };
 
   const handleQuickReplyClick = (question) => {
     handleUserQuestion(question);
-    // Refresh quick replies with new random 3 questions except the one clicked
     const remaining = faqQA.filter((f) => f.question !== question);
     setQuickReplies(getRandomFaqsFromArray(3, remaining));
   };
 
-  // Helper: pick random faqs from provided array
+  // Helper to get random FAQs from a given array
   const getRandomFaqsFromArray = (count, arr) => {
     const copy = [...arr];
     const selected = [];
@@ -421,23 +245,22 @@ const handleUserQuestion = (question) => {
     <div>
       {!isOpen && (
         <button
-          style={styles.bubble}
+          className="chat-bubble"
           onClick={toggleChat}
+          aria-label="Open chatbot"
           onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
           onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-          aria-label="Open chatbot"
         >
           ⚡
         </button>
       )}
 
       {isOpen && (
-        <div style={styles.chatWindow} aria-modal="true" role="dialog" aria-label="ChargeMe chatbot window">
-          {/* Header */}
-          <div style={styles.header}>
+        <div className="chat-window" aria-modal="true" role="dialog" aria-label="ChargeMe chatbot window">
+          <div className="chat-header">
             ChargeMe Support
             <button
-              style={styles.closeButton}
+              className="close-button"
               onClick={toggleChat}
               aria-label="Close chatbot"
               title="Close chatbot"
@@ -446,10 +269,9 @@ const handleUserQuestion = (question) => {
             </button>
           </div>
 
-          {/* Content Area */}
-          <div style={styles.scrollArea} ref={scrollRef}>
+          <div className="scroll-area" ref={scrollRef}>
             {activeTab === 'home' && (
-              <div style={styles.homeContent}>
+              <div className="home-content">
                 <h2>What is ChargeMe?</h2>
                 <p>
                   ChargeMe is a smart IoT-based power bank sharing service. We provide portable chargers at convenient locations,
@@ -475,13 +297,9 @@ const handleUserQuestion = (question) => {
                 {chatHistory.map((msg, i) => (
                   <div
                     key={i}
-                    style={{
-                      display: 'flex',
-                      justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
-                      marginBottom: 10,
-                    }}
+                    style={{ display: 'flex', justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start', marginBottom: 10 }}
                   >
-                    <div style={styles.chatBubble(msg.sender === 'user')}>
+                    <div className={`chat-bubble-message ${msg.sender === 'user' ? 'user' : 'bot'}`}>
                       {msg.text.split('\n').map((line, idx) => (
                         <p key={idx} style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{line}</p>
                       ))}
@@ -489,13 +307,12 @@ const handleUserQuestion = (question) => {
                   </div>
                 ))}
 
-                {/* Quick Replies */}
                 {quickReplies.length > 0 && (
-                  <div style={styles.quickRepliesContainer} aria-label="Suggested questions">
+                  <div className="quick-replies-container" aria-label="Suggested questions">
                     {quickReplies.map(({ question }) => (
                       <button
                         key={question}
-                        style={styles.quickReplyButton}
+                        className="quick-reply-button"
                         onClick={() => handleQuickReplyClick(question)}
                         aria-label={`Ask: ${question}`}
                       >
@@ -503,7 +320,8 @@ const handleUserQuestion = (question) => {
                       </button>
                     ))}
                     <button
-                      style={{ ...styles.quickReplyButton, backgroundColor: '#666' }}
+                      className="quick-reply-button"
+                      style={{ backgroundColor: '#666' }}
                       onClick={() => addMessage('bot', 'Please type your question below.')}
                     >
                       No, something else
@@ -529,16 +347,16 @@ const handleUserQuestion = (question) => {
               <>
                 <h3>Contact Customer Support</h3>
                 <p>
-                  You can reach out via in-app live chat, email at <a href="mailto:support@technoiot.com">support@technoiot.com</a>, or call +91-XXXXXXXXXX.
+                  You can reach out via in-app live chat, email at{' '}
+                  <a href="mailto:support@technoiot.com">support@technoiot.com</a>, or call +91-XXXXXXXXXX.
                 </p>
                 <SupportForm />
               </>
             )}
           </div>
 
-          {/* Input & Send (only for Chat tab) */}
           {activeTab === 'chat' && (
-            <div style={styles.inputContainer}>
+            <div className="input-container">
               <input
                 type="text"
                 aria-label="Type your message"
@@ -548,12 +366,12 @@ const handleUserQuestion = (question) => {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleSend();
                 }}
-                style={styles.input}
+                className="input-field"
               />
               <button
                 onClick={handleSend}
                 aria-label="Send message"
-                style={styles.sendButton}
+                className="send-button"
                 disabled={!chatInput.trim()}
               >
                 Send
@@ -561,16 +379,15 @@ const handleUserQuestion = (question) => {
             </div>
           )}
 
-          {/* Bottom Navigation */}
-          <nav style={styles.navContainer} role="tablist" aria-label="Chatbot navigation">
+          <nav className="nav-container" role="tablist" aria-label="Chatbot navigation">
             {['home', 'chat', 'knowledge', 'support'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => {
                   setActiveTab(tab);
-                  if (tab === 'chat') setQuickReplies(getRandomFaqs(3)); // refresh quick replies on chat tab open
+                  if (tab === 'chat') setQuickReplies(getRandomFaqs(3));
                 }}
-                style={styles.navButton(activeTab === tab)}
+                className={`nav-button ${activeTab === tab ? 'active' : ''}`}
                 role="tab"
                 aria-selected={activeTab === tab}
                 aria-controls={`tabpanel-${tab}`}
@@ -584,6 +401,6 @@ const handleUserQuestion = (question) => {
       )}
     </div>
   );
-}
+};
 
 export default Chatbot;
