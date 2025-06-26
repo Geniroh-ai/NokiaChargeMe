@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/NokiaChargeMe/static/css/main.e6c13ad2.css",
+    "main.js": "/NokiaChargeMe/static/js/main.d1d14f47.js",
+    "static/js/453.babaf1bf.chunk.js": "/NokiaChargeMe/static/js/453.babaf1bf.chunk.js",
+    "index.html": "/NokiaChargeMe/index.html",
+    "main.e6c13ad2.css.map": "/NokiaChargeMe/static/css/main.e6c13ad2.css.map",
+    "main.d1d14f47.js.map": "/NokiaChargeMe/static/js/main.d1d14f47.js.map",
+    "453.babaf1bf.chunk.js.map": "/NokiaChargeMe/static/js/453.babaf1bf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.d1d14f47.js"
+  ]
+}
