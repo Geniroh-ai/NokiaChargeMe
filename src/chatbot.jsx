@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './chatbot.css'; // Assuming you have a CSS file for styles
 import './App.css'; // Import global styles if needed
+import bannerImage from './chargemebanner.png';
 
 const faqQA = [
   {
@@ -152,6 +153,43 @@ const SupportForm = () => {
   );
 };
 
+const AccordionFaq = ({ faqs }) => {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleIndex = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <div className="accordion-container">
+      {faqs.map((faq, index) => (
+        <div key={index} className="accordion-item">
+          <div
+            className="accordion-header"
+            onClick={() => toggleIndex(index)}
+            role="button"
+            tabIndex={0}
+            aria-expanded={openIndex === index}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') toggleIndex(index);
+            }}
+          >
+            <span className="accordion-question">{faq.question}</span>
+            <span className="accordion-icon">{openIndex === index ? '–' : '+'}</span>
+          </div>
+          {openIndex === index && (
+            <div className="accordion-body">
+              {faq.answer.split('\n').map((line, idx) => (
+                <p key={idx}>{line}</p>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
@@ -159,11 +197,7 @@ const Chatbot = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [quickReplies, setQuickReplies] = useState(getRandomFaqs(3));
 
-  const scrollRef = useRef();
-
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [chatHistory, activeTab]);
+  const scrollRef = useRef(null);
 
   const toggleChat = () => setIsOpen((open) => !open);
 
@@ -171,6 +205,18 @@ const Chatbot = () => {
     setChatHistory((prev) => [...prev, { sender, text }]);
   };
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [chatHistory]);
+
+  // Scroll to top on tab change
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [activeTab]);
 
   // Map of related questions by question text
 const relatedQuestionsMap = {
@@ -272,6 +318,11 @@ const handleUserQuestion = (question) => {
           <div className="scroll-area" ref={scrollRef}>
             {activeTab === 'home' && (
               <div className="home-content">
+                <img 
+                  src={bannerImage} 
+                  alt="ChargeMe Banner" 
+                  style={{ width: '100%', height: 'auto', marginBottom: '20px', borderRadius: '8px' }}
+                />
                 <h2>What is ChargeMe?</h2>
                 <p>
                   ChargeMe is a smart IoT-based power bank sharing service. We provide portable chargers at convenient locations,
@@ -333,13 +384,8 @@ const handleUserQuestion = (question) => {
 
             {activeTab === 'knowledge' && (
               <div>
-                <h3>User Documentation</h3>
-                <p>Here you can browse FAQs and guides.</p>
-                <ul>
-                  <li>How to use the ChargeMe chatbot</li>
-                  <li>Common rental questions</li>
-                  <li>Support & troubleshooting</li>
-                </ul>
+                <h3>User Documentation & FAQs</h3>
+                <AccordionFaq faqs={faqQA} />
               </div>
             )}
 
@@ -348,7 +394,7 @@ const handleUserQuestion = (question) => {
                 <h3>Contact Customer Support</h3>
                 <p>
                   You can reach out via in-app live chat, email at{' '}
-                  <a href="mailto:support@technoiot.com">support@technoiot.com</a>, or call +91-XXXXXXXXXX.
+                  <a href="mailto:support@technoiot.com">support@technoiot.com</a>, or call +351-XXXXXXXXXX.
                 </p>
                 <SupportForm />
               </>
