@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/NokiaChargeMe/static/css/main.c4e773f6.css",
-    "main.js": "/NokiaChargeMe/static/js/main.3c2c1be8.js",
+    "main.css": "/NokiaChargeMe/static/css/main.42f1103b.css",
+    "main.js": "/NokiaChargeMe/static/js/main.03a0720b.js",
     "static/js/453.babaf1bf.chunk.js": "/NokiaChargeMe/static/js/453.babaf1bf.chunk.js",
+    "static/media/chargemebanner.png": "/NokiaChargeMe/static/media/chargemebanner.ce0442b43ecc155e0b81.png",
     "index.html": "/NokiaChargeMe/index.html",
-    "main.c4e773f6.css.map": "/NokiaChargeMe/static/css/main.c4e773f6.css.map",
-    "main.3c2c1be8.js.map": "/NokiaChargeMe/static/js/main.3c2c1be8.js.map",
+    "main.42f1103b.css.map": "/NokiaChargeMe/static/css/main.42f1103b.css.map",
+    "main.03a0720b.js.map": "/NokiaChargeMe/static/js/main.03a0720b.js.map",
     "453.babaf1bf.chunk.js.map": "/NokiaChargeMe/static/js/453.babaf1bf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c4e773f6.css",
-    "static/js/main.3c2c1be8.js"
+    "static/css/main.42f1103b.css",
+    "static/js/main.03a0720b.js"
   ]
 }
