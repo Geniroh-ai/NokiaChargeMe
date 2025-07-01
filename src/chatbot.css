@@ -1,3 +1,15 @@
+.home-content {
+  background: linear-gradient(
+    to bottom,
+    #93daca 0%,       /* Replace with the blue shade matching your banner */
+    #1E3A8A 360px,    /* Height equal to banner height or area to cover */
+    #ffffff 300px,    /* Transition point */
+    #ffffff 100%
+  );
+  /* optional padding/margin */
+  padding: 20px;
+}
+
 .chat-bubble {
   position: fixed;
   bottom: 20px;
@@ -5,12 +17,12 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
-  color: white;
+  background: linear-gradient(135deg, #90e3e1 0%, #0044ff 100%);
+  color: #39871c;
   border: none;
   font-size: 28px;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(0,176,155,0.5);
+  box-shadow: 0 8px 20px rgba(238, 238, 238, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,8 +42,9 @@
   width: 440px;
   height: 540px;
   border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  background: linear-gradient(135deg, #f7fdf9, #eafaf1);
+  box-shadow: 0 20px 40px rgba(90,40,10,0.3);
+  background: linear-gradient(135deg, #f9f9f9, #f8f8f8);
+  color: #4b3b2b;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -43,7 +56,7 @@
 
 .chat-header {
   padding: 16px 24px;
-  background: linear-gradient(90deg, #00b09b 0%, #96c93d 100%);
+  background: linear-gradient(90deg, #78c1d2 0%, #0f4e65 100%);
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -69,8 +82,8 @@
 
 .nav-container {
   display: flex;
-  border-top: 1px solid #ddd;
-  background-color: #f9f9f9;
+  border-top: 1px solid #a6e0fd;
+  background-color: #0f4e65;
   padding: 10px 0;
   justify-content: space-around;
 }
@@ -81,7 +94,7 @@
   padding: 14px;
   border: none;
   background-color: transparent;
-  color: #555;
+  color: #ffffff;
   cursor: pointer;
   font-weight: 600;
   font-size: 16px;
@@ -92,8 +105,8 @@
 }
 
 .nav-button.active {
-  background-color: #96c93d;
-  color: #fff;
+  background-color: #71dff0;
+  color: #000000;
   font-weight: 700;
 }
 
@@ -110,7 +123,7 @@
 }
 
 .scroll-area::-webkit-scrollbar-thumb {
-  background: #96c93d;
+  background: #078185bb;
   border-radius: 8px;
 }
 
@@ -130,8 +143,8 @@
 }
 
 .chat-bubble-message.user {
-  background: linear-gradient(135deg, rgba(162, 233, 199, 0.9), rgba(0, 176, 155, 0.9));
-  color: #004d40;
+  background: #b5d1f0;
+  color: #010101;
   align-self: flex-end;
 }
 
@@ -143,17 +156,17 @@
 
 .input-container {
   padding: 16px;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #fcfcfc;
   display: flex;
   align-items: center;
-  background-color: #f0f7f3;
+  background-color: #0f184fd9;
 }
 
 .input-field {
   flex: 1;
   padding: 14px 18px;
   border-radius: 24px;
-  border: 1.5px solid #96c93d;
+  border: 1.5px solid #ffffff;
   font-size: 16px;
   outline: none;
   transition: box-shadow 0.3s ease;
@@ -161,15 +174,15 @@
 
 .send-button {
   margin-left: 12px;
-  background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #aeeef3 0%, #b7f2e6 100%);
+  color: #000000;
   border: none;
   border-radius: 24px;
   padding: 14px 24px;
   font-weight: 700;
   font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(150,201,61,0.5);
+  box-shadow: 0 10px 25px rgba(236, 197, 150, 0.5);
   -webkit-user-select: none;
     user-select: none;
 }
@@ -200,7 +213,7 @@
 }
 
 .quick-reply-button:hover {
-  background-color: #7a9a2e;
+  background-color: #843900;
 }
 
 .support-form {
@@ -232,6 +245,40 @@
   color: #2e3a59;
 }
 
+
+.accordion-container {
+  padding: 12px 20px;
+}
+
+.accordion-item {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 16px;
+  color: #2e3a59;
+}
+
+.accordion-icon {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.accordion-body {
+  padding: 8px 12px 12px 12px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+
 /* Responsive for mobile */
 @media (max-width: 480px) {
   .chat-window {
@@ -248,4 +295,8 @@
     bottom: 10px;
     right: 10px;
   }
+}
+
+.quick-replies-container {
+  display: none !important;
 }
