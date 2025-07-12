@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './chatbot.css'; // Assuming you have a CSS file for styles
 import './App.css'; // Import global styles if needed
 import bannerImage from './chargemebanner.png';
+import botimage from './bot-icon.png';
+import userimage from './user-icon.png';
 
 const faqQA = [
   {
@@ -196,6 +198,8 @@ const Chatbot = () => {
   const [chatInput, setChatInput] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [quickReplies, setQuickReplies] = useState(getRandomFaqs(3));
+  const [showFeedbackForIndex, setShowFeedbackForIndex] = useState(null);
+  const [feedbackRating, setFeedbackRating] = useState(null);
 
   const scrollRef = useRef(null);
 
@@ -264,17 +268,35 @@ const handleUserQuestion = (question) => {
     }
   };
 
-  const handleSend = () => {
-    if (!chatInput.trim()) return;
-    handleUserQuestion(chatInput);
-    setChatInput('');
-  };
+const handleSend = async () => {
+  if (!chatInput.trim()) return;
+
+  const userQuestion = chatInput;
+  addMessage('user', userQuestion);
+  setChatInput('');
+
+  // 🔗 Call LangChain backend
+  try {
+    const res = await fetch('http://localhost:8000/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: userQuestion }),
+    });
+
+    const data = await res.json();
+    addMessage('bot', data.response || "Sorry, I couldn't understand that.");
+  } catch (error) {
+    console.error('LLM fetch error:', error);
+    addMessage('bot', "Hmm… I couldn’t reach the assistant. Please try again.");
+  }
+
+  setQuickReplies(getRandomFaqs(3));
+};
 
   const handleQuickReplyClick = (question) => {
-    handleUserQuestion(question);
-    const remaining = faqQA.filter((f) => f.question !== question);
-    setQuickReplies(getRandomFaqsFromArray(3, remaining));
-  };
+  setChatInput(question);
+  handleSend(); // Triggers the same logic
+};
 
   // Helper to get random FAQs from a given array
   const getRandomFaqsFromArray = (count, arr) => {
@@ -285,6 +307,32 @@ const handleUserQuestion = (question) => {
       selected.push(copy.splice(idx, 1)[0]);
     }
     return selected;
+  };
+
+  const handleEndChat = (index) => {
+    setShowFeedbackForIndex(index);
+  };
+
+  const submitFeedback = async (rating, messageIndex) => {
+    setFeedbackRating(rating);
+    setShowFeedbackForIndex(null);
+
+    // 🔗 Save rating to backend → store in ChromaDB
+    try {
+      await fetch('http://localhost:8000/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rating,
+          query: chatHistory[messageIndex - 1]?.text || '',
+          response: chatHistory[messageIndex]?.text || '',
+        }),
+      });
+      console.log("✅ Feedback submitted.");
+    } catch (err) {
+      console.error("❌ Feedback submission failed", err);
+    }
+    addMessage('bot', "Thanks for your feedback! The conversation has been closed. You can start a new one anytime.");
   };
 
   return (
@@ -348,13 +396,73 @@ const handleUserQuestion = (question) => {
                 {chatHistory.map((msg, i) => (
                   <div
                     key={i}
-                    style={{ display: 'flex', justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start', marginBottom: 10 }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      marginBottom: 10,
+                      justifyContent: msg.sender === 'user' ? 'flex-end' : 'flex-start',
+                    }}
                   >
-                    <div className={`chat-bubble-message ${msg.sender === 'user' ? 'user' : 'bot'}`}>
+                    {msg.sender === 'bot' && (
+                      <img
+                        src={botimage}
+                        alt="Bot"
+                        style={{ width: 32, height: 32, borderRadius: '50%', marginRight: 8 }}
+                      />
+                    )}
+
+                    <div className={`chat-bubble-message ${msg.sender}`}>
                       {msg.text.split('\n').map((line, idx) => (
-                        <p key={idx} style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{line}</p>
+                        <p key={idx} style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
+                          {line}
+                        </p>
                       ))}
+
+                      {msg.sender === 'bot' && (
+                        <>
+                          <button
+                            className="end-chat-button"
+                            onClick={() => handleEndChat(i)}
+                            style={{
+                              marginTop: '8px',
+                              background: '#eee',
+                              borderRadius: '4px',
+                              padding: '4px 8px',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            End conversation
+                          </button>
+
+                          {showFeedbackForIndex === i && (
+                            <div style={{ marginTop: '8px' }}>
+                              <p style={{ marginBottom: '4px' }}>Rate this response:</p>
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <span
+                                  key={star}
+                                  style={{
+                                    cursor: 'pointer',
+                                    color: feedbackRating >= star ? 'gold' : '#ccc',
+                                    fontSize: '20px',
+                                  }}
+                                  onClick={() => submitFeedback(star, i)}
+                                >
+                                  ★
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </>
+                      )}
                     </div>
+
+                    {msg.sender === 'user' && (
+                      <img
+                        src={userimage}
+                        alt="You"
+                        style={{ width: 32, height: 32, borderRadius: '50%', marginLeft: 8 }}
+                      />
+                    )}
                   </div>
                 ))}
 

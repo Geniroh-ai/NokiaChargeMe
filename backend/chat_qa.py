@@ -39,12 +39,27 @@ def get_bot_response(query):
     docs_context = "\n\n".join([doc.page_content for doc in product_docs]) if product_docs else "No product info found."
     chat_context = "\n\n".join([doc.page_content for doc in chat_docs]) if chat_docs else "No prior chat history."
 
+    feedback_docs = chat_history_collection.as_retriever(search_kwargs={"k": 5}).invoke("previous feedback")
+
+    feedback_context = "\n\n".join([doc.page_content for doc in feedback_docs if doc.metadata.get("role") == "feedback"] if feedback_docs else "No feedback found.")
+
     full_context = f"Product Documentation:\n{docs_context}\n\nChat History:\n{chat_context}"
+
+    full_context += f"\n\nUser Feedback History:\n{feedback_context}"
+
+    system_prompt = f"""
+    You are ChargeMe product support. Use the following information to answer user questions about ChargeMe:
+    {full_context}
+
+    If the answer to the question is not available in the provided information, respond with: "I'm sorry, I don't have the information to answer that question."
+    """
+
+    print("Full Context being passed to LLM:\n", full_context)  # Add this line
 
     response = client.chat.completions.create(
         model=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
         messages=[
-            {"role": "system", "content": f"You are ChargeMe product support. Use this info:\n{full_context}"},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": query},
         ],
         max_tokens=800,
@@ -76,9 +91,9 @@ def test_azure_connection():
         print(f"Endpoint: {os.getenv('AZURE_OPENAI_ENDPOINT')}")
         print(f"Deployment: {os.getenv('AZURE_OPENAI_DEPLOYMENT_NAME')}")
         return False
-    
+
 if __name__ == "__main__":
     if test_azure_connection():
         question = "How do I reset my ChargeMe device?"
-        answer = ask_chargeMe_bot(question)
+        answer = get_bot_response(question)
         print("ChargeMe Bot Answer:", answer)

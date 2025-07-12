@@ -27,5 +27,5 @@ print(f"✂️ Split into {len(docs)} chunks")
 # Create embeddings and save to ChromaDB
 embedding = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
-db = Chroma.from_documents(docs, embedding, persist_directory="vector_db")
+db = Chroma.from_documents(docs, embedding, persist_directory="chargeMe_vector_db")
 print("✅ Documents embedded and stored in ChromaDB.")
