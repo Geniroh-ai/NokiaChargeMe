@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from chat_qa import get_bot_response, chat_history_collection  # your function from chat_qa.py
+from langchain_core.documents import Document
 
 app = FastAPI()
 
@@ -29,6 +30,7 @@ class Feedback(BaseModel):
 
 @app.post("/feedback")
 async def feedback_endpoint(feedback: Feedback):
+    print(f"Received feedback: rating={feedback.rating}, query={feedback.query}, response={feedback.response}")
     # Store feedback into ChromaDB or a separate collection
     chat_history_collection.add_documents([
         Document(
