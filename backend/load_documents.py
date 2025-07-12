@@ -5,7 +5,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import AzureOpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from sentence_transformers import SentenceTransformer
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 
 # Load .env file
 load_dotenv()
@@ -28,5 +28,4 @@ print(f"✂️ Split into {len(docs)} chunks")
 embedding = HuggingFaceEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
 db = Chroma.from_documents(docs, embedding, persist_directory="vector_db")
-db.persist()
 print("✅ Documents embedded and stored in ChromaDB.")
